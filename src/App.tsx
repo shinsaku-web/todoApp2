@@ -1,16 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios';
+import { BsFillTrashFill } from "react-icons/bs";
+
+type Todo = {
+  id: number
+  title:string
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState<Todo[]>([])
+  console.log(todos);
+  useEffect(() => {
+    axios.get('http://localhost:3000/todos')
+      .then(res => {
+        setTodos(res.data)
+      })
+      .catch(e => console.error(e)
+      )
+  },[])
 
   return (
     <div className="App">
-       <h1 className="text-3xl text-blue-400 font-bold underline">
-      Hello world!
-      </h1>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+      <h1 className='text-center font-bold text-3xl pt-20'>TODO</h1>
+      <div className='max-w-xl py-16 mx-auto'>
+        <div className=''>
+        {todos.length ?
+          <ul>
+        {todos.map((todo) => (
+          <li className='p-4 ' key={todo.id}>{todo.title}
+            <BsFillTrashFill/></li>
+        ))}
+          </ul>
+          : <p>todoはありません</p>}
+        </div>
+        </div>
     </div>
   )
 }
