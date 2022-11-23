@@ -2,7 +2,7 @@ interface Props{
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     onEnterKeyDown?:(e:React.KeyboardEvent<HTMLInputElement>)=>void
     placeholder: string
-    value:string | number | readonly string[]
+    value?:string | number | readonly string[]
 }
 
 export const Input = ({onChange,onEnterKeyDown,placeholder,value}:Props) => {

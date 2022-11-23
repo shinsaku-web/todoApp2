@@ -9,12 +9,14 @@ type Todo = {
 }
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, setTodos] = useState<Todo[]>([])//データとして保持するTodo
+  const [showTodos, setShowTodos] = useState<Todo[]>([])//実際に表示するTodo
   const [newTodo, setNewTodo] = useState<string>("")
 
   const fetchTodos = () => {
     axios.get('http://localhost:3000/todos')
       .then(res => {
+        setShowTodos(res.data)
         setTodos(res.data)
       }).catch(e => {
         console.error(e)
@@ -51,6 +53,20 @@ function App() {
     })
   }
 
+  const searchTodo = (text: string) => {
+    if (!text) {
+      fetchTodos()
+      return
+    }
+    const filterTodos = todos.filter((todo) => {
+      const reg = new RegExp(`^${text}`)
+      return (
+        reg.test(todo.title)
+      )
+    })
+    setShowTodos(filterTodos)
+  }
+
   useEffect(() => {
     fetchTodos()
   },[])
@@ -63,13 +79,13 @@ function App() {
           <Input placeholder='Todoを入力' onChange={(e) => changeNewTodo(e)} onEnterKeyDown={(e) => addNewTodo(e)} value={newTodo} />
         </div>
         <div className='pt-4'>
-          <Input placeholder='検索' onChange={()=>console.log("change")
-          } value=""/>
+          <Input placeholder='検索' onChange={(e) => searchTodo(e.currentTarget.value)
+          } />
         </div>
         <div className='pt-10'>
-        {todos.length ?
+        {showTodos.length ?
           <ul className='space-y-4'>
-        {todos.map((todo) => (
+        {showTodos.map((todo) => (
           <li key={todo.id}>
             <Todo title={todo.title} deleteFunc={()=>deleteTodo(todo.id)} />
           </li>
