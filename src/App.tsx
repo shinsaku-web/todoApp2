@@ -16,14 +16,9 @@ function App() {
     axios.get('http://localhost:3000/todos')
       .then(res => {
         setTodos(res.data)
-      })
-      .catch(e => {
+      }).catch(e => {
         console.error(e)
-        alert("取得に失敗しました")
-      }
-      ).catch(e => {
-        console.error(e)
-        alert("サーバーエラー！")
+        alert("エラー")
       })
   }
 
@@ -40,13 +35,20 @@ function App() {
         })
         .catch(err => {
           console.error(err)
-          alert("取得に失敗しました")
-        })
-        .catch(err => {
-          console.error(err)
-          alert("追加に失敗しました")
+          alert("エラー")
         })
     }
+  }
+
+  const deleteTodo = (id: number) => {
+    axios.delete(`http://localhost:3000/todos/${id}`)
+    .then(() => {
+      fetchTodos()
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("エラー")
+    })
   }
 
   useEffect(() => {
@@ -69,7 +71,7 @@ function App() {
           <ul className='space-y-4'>
         {todos.map((todo) => (
           <li key={todo.id}>
-            <Todo title={todo.title} />
+            <Todo title={todo.title} deleteFunc={()=>deleteTodo(todo.id)} />
           </li>
         ))}
           </ul>
