@@ -1,9 +1,12 @@
 import { Todo } from './components/Todo';
 import { Input } from './components/Input';
 import { useTodo } from './hooks/useTodo';
+import { useContext } from 'react';
+import { TodoContext } from './contexts/TodoContext';
 
 function App() {
-  const {showTodos,newTodo,changeNewTodo,addNewTodo,deleteTodo,searchTodo} = useTodo();
+  // const {showTodos,newTodo,changeNewTodo,addNewTodo,deleteTodo,searchTodo} = useTodo();
+  const {showTodos,newTodo,changeNewTodo,addNewTodo,deleteTodo,searchTodo} = useContext(TodoContext);
 
   return (
     <div className="App">
